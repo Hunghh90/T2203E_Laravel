@@ -1,87 +1,111 @@
 @extends('admin.layout')
-@section('title','Home')
+@section('title','Product')
 @section('content_header')
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">List Product</h1>
+
     </div><!-- /.col -->
-    <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard v1</li>
-        </ol>
-    </div><!-- /.col -->
+
+    <div class="col-md-6">
+        <a href="admin/product/create" class="btn btn-primary">Create</a>
+    </div>
+
+
+
+@endsection
+@section('custom_js')
+    <script src="/admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 @endsection
 @section('main_content')
     <div >
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">List Product</h3>
-
                 <div class="card-tools">
-                    <ul class="pagination pagination-sm float-right">
-                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                    </ul>
-                </div>
+                <form method="get" action="{{url("admin/product/list")}}">
+                    <div class="card card-secondary">
+                        <div class="card-header">
+                            <h3 class="card-title">Bootstrap Switch</h3>
+                        </div>
+                        <div class="card-body">
+                            <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch>
+                            <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                        </div>
+                    </div>
+                    <div class="input-group input-group-sm float-left mr-3" style="width: 150px;">
+                        <select class="form-control float-right" name="category_id">
+                            <option value="0">Choose categories...</option>
+                            @foreach($categories as $item)
+                                <option @if(app("request")->input("category_id")==$item->id) selected @endif value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input value="{{app("request")->input("search")}}" type="text" name="search" class="form-control float-right" placeholder="Search">
+
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+
+
+
+
+                </form>
+                    </div>
             </div>
+        </div>
+
             <!-- /.card-header -->
             <div class="card-body p-0">
                 <table class="table">
                     <thead>
                     <tr>
-                        <th style="width: 10px">#</th>
-                        <th>Task</th>
-                        <th>Progress</th>
-                        <th style="width: 40px">Label</th>
+                        <th Id="width: 10px">#</th>
+                        <th>Name</th>
+                        <th>Thumbnail</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Category</th>
+                        <th style="width: 40px">status</th>
+                        <th>Action</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
+                   @foreach($data as $item)
                     <tr>
-                        <td>1.</td>
-                        <td>Update software</td>
+                        <td>{{$item->id}}</td>
+                        <td>{{$item->name}}</td>
+                        <td><img width="100" src="{{$item->thumbnail}}"/></td>
+                        <td>{{$item->price}}</td>
+                        <td>{{$item->qty}}</td>
+                        <td>{{$item->Category->name}}</td>
                         <td>
-                            <div class="progress progress-xs">
-                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                            </div>
+                            @if($item->status)
+                                <span class="badge bg-success">Active</span>
+                            @else
+                                <span class="badge bg-danger">Inactive</span>
+                            @endif
                         </td>
-                        <td><span class="badge bg-danger">55%</span></td>
-                    </tr>
-                    <tr>
-                        <td>2.</td>
-                        <td>Clean database</td>
                         <td>
-                            <div class="progress progress-xs">
-                                <div class="progress-bar bg-warning" style="width: 70%"></div>
-                            </div>
+                            <a href="{{url("admin/product/edit",["product"=>$item->id])}}" class="btn btn-primary">Edit</a>
+
                         </td>
-                        <td><span class="badge bg-warning">70%</span></td>
-                    </tr>
-                    <tr>
-                        <td>3.</td>
-                        <td>Cron job running</td>
                         <td>
-                            <div class="progress progress-xs progress-striped active">
-                                <div class="progress-bar bg-primary" style="width: 30%"></div>
-                            </div>
+                            <form action="{{url("admin/product/delete",["product"=>$item->id])}}" method="post">
+                                @csrf
+                                <button type="submit" onclick="return confirm('chac chan xoa');" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
-                        <td><span class="badge bg-primary">30%</span></td>
+
                     </tr>
-                    <tr>
-                        <td>4.</td>
-                        <td>Fix and squish bugs</td>
-                        <td>
-                            <div class="progress progress-xs progress-striped active">
-                                <div class="progress-bar bg-success" style="width: 90%"></div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-success">90%</span></td>
-                    </tr>
+                   @endforeach
                     </tbody>
                 </table>
             </div>
             <!-- /.card-body -->
-
+            <div class="card-tools">
+                {!! $data->appends(app("request")->input())->links("pagination::bootstrap-4") !!}
+            </div>
 @endsection

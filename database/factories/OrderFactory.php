@@ -14,8 +14,16 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'oder_date'=>$this->faker->date,
-            'grand_total'=>$this->faker->randomFloat(12,10000.00,10000000.00),
+            'oder_date'=>now(),
+            'fist_name'=>$this->faker->firstName,
+            'last_name'=>$this->faker->lastName,
+            'country'=>$this->faker->country,
+            'city'=>$this->faker->city,
+            'state'=>$this->faker->country,
+            'postcode'=>$this->faker->postcode,
+            'email'=>$this->faker->email,
+            'notes'=>$this->faker->text,
+            'grand_total'=>0,
             'shipping_address'=>$this->faker->address,
             'customer_tel'=>$this->faker->phoneNumber,
             'status'=>$this->faker->boolean

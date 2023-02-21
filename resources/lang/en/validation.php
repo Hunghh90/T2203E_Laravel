@@ -158,6 +158,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        "name"=>"ten",
+        "price"=>"gia",
+        "qty"=>"so luong"
+    ],
 
 ];
